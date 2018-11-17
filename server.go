@@ -62,6 +62,7 @@ func (wo *Obj) SendAnswer() {
 			MaxAge:   initParams.Cookie.Time,
 			HttpOnly: true,
 			Secure:   initParams.Cookie.Secure,
+			SameSite: 1,
 		}
 		http.SetCookie(wo.W, &cookie)
 	}
