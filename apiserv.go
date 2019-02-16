@@ -1,6 +1,7 @@
 package apiserv
 
 import (
+	"context"
 	"log"
 	"strings"
 	"sync"
@@ -35,14 +36,20 @@ func Init(p Param) (exitChan chan bool) {
 func waitExit(exitChan chan bool) {
 	_ = <-exitChan
 
-	exited = true
+	//exited = true
 
 	log.Println("[info]", "Завершаем работу api сервера")
 
 	// Ждем пока все запросы завершатся
-	wg.Wait()
+	//wg.Wait()
+
+	if err := httpServer.Shutdown(context.Background()); err != nil {
+		// Error from closing listeners, or context timeout:
+		log.Printf("HTTP server Shutdown: %v\n", err)
+	}
 
 	log.Println("[info]", "Работа api сервера завершена корректно")
+
 	exitChan <- true
 }
 

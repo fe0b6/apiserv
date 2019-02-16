@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+var (
+	httpServer http.Server
+)
+
 // Начитаем слушать порт
 func listen(port int) {
 
@@ -17,7 +21,13 @@ func listen(port int) {
 		http.HandleFunc("/", initParams.ParseRequest)
 	}
 
-	log.Fatalln("[fatal]", http.ListenAndServe(":"+strconv.Itoa(port), nil))
+	httpServer = http.Server{Addr: ":" + strconv.Itoa(port)}
+	if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
+		// Error starting or closing listener:
+		log.Fatalln("[fatal]", err)
+	}
+
+	//	log.Fatalln("[fatal]", http.ListenAndServe(":"+strconv.Itoa(port), nil))
 }
 
 // Разбираем запрос
