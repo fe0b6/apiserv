@@ -24,10 +24,10 @@ func Init(p Param) (exitChan chan bool) {
 	// Канал для оповещения о выходе
 	exitChan = make(chan bool)
 
-	go waitExit(exitChan)
-
 	// Начинаем слушать http-порт
 	go listen(initParams.Port)
+
+	go waitExit(exitChan)
 
 	return
 }
